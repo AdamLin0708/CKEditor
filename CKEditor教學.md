@@ -58,7 +58,7 @@ CKEditor是一個很好用的套件，主要是使用者要 新增/編輯文章 
 
 * ```
   <script>
-      CKEDITOR.replace('creditor_example');
+      CKEDITOR.replace('ckeditor_example');
   </script>
   ```
 
@@ -71,12 +71,88 @@ CKEditor是一個很好用的套件，主要是使用者要 新增/編輯文章 
 說明：
 
 1. 不管是下載下來，或是透過CDN使用的CKEditor，基本上還是會缺少一些功能（ex: 嵌入Youtube影片....），因此會需要透過加上Plugin來新增功能，且新增到功能列表上
-2. 這邊分成兩個部分講解，因為CDN跟下載到Local的新增方式會有一些不一樣
-
-（一）下載Plugin
 
 * 先到官網下載想要的Plugins [https://ckeditor.com/cke4/addons/plugins/all](https://ckeditor.com/cke4/addons/plugins/all) （就不列舉了，有非常多種呢！）
-* 這邊使用Youtube Plugin做為講解
-* 
+* 這邊使用Youtube Plugin做為講解，下載Plugin之後，可以放到自己喜歡的路徑，我是為了方便管理，建立了一個資料夾ckeditor在public底下，並將剛剛下載的plugin放到ckeditor內
+* 而在ckeditor內，應該會有除了剛剛的plugin之外，還有四個檔案，我們接著來看
+* bower.json
+  * ```
+    adam [5:49 PM] 
+    {
+     "name": "ckeditor-youtube-plugin",
+     "version": "2.1.8",
+     "homepage": "https://github.com/fonini/ckeditor-youtube-plugin",
+     "authors": [
+       "Jonnas Fonini"
+     ],
+     "license": "MIT",
+     "dependencies": {
+       "ckeditor": ">= 4.0.0"
+     },
+     "ignore": [
+       "**/.*",
+       "node_modules",
+       "bower_components",
+       "test",
+       "tests"
+     ]
+    }
+    ```
 
+* config.js（這邊可以看到如何加上youtube plugin
+  除了addExternal之外，還要再editorConfig內部，加上config.extraPlugin = 'youtube'
+
+* * ```
+    CKEDITOR.plugins.addExternal('youtube', '/ckeditor/youtube/', 'plugin.js');
+    CKEDITOR.editorConfig = function( config ) {
+     // Define changes to default configuration here.
+     // For complete reference see:
+     // http://docs.ckeditor.com/#!/api/CKEDITOR.config
+     config.extraPlugins = 'youtube';
+     // The toolbar groups arrangement, optimized for two toolbar rows.
+     config.toolbarGroups = [
+       { name: 'document', groups: [ 'mode' ] },
+       { name: 'clipboard', groups: [ 'clipboard', 'undo' ] },
+       { name: 'editing', groups: [ 'find', 'selection', 'spellchecker', 'editing' ] },
+       '/',
+       { name: 'links', groups: [ 'links' ] },
+       { name: 'insert', groups: [ 'insert','youtube' ] },
+       { name: 'tools', groups: [ 'tools' ] },
+       '/',
+       { name: 'paragraph', groups: [ 'list', 'indent', 'blocks', 'align', 'bidi', 'paragraph' ] },
+       { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
+       { name: 'styles', groups: [ 'styles' ] },
+       { name: 'colors', groups: [ 'colors' ] }
+     ];
+
+     config.removeButtons = 'Underline,Subscript,Superscript';
+
+     // Set the most common block elements.
+     config.format_tags = 'p;h1;h2;h3;pre';
+
+     // Simplify the dialog windows.
+     config.removeDialogTabs = 'image:advanced;link:advanced';
+    };
+    ```
+
+* README.md
+* LICENSE.md
+* 最後一步，要到前面設定的
+  ```
+  <script>
+      CKEDITOR.replace('ckeditor_example');
+  </script>
+  ```
+
+        做一點點更改，要改成
+
+```
+        CKEDITOR.replace( 'ckeditor_example', {
+           customConfig: 'ckeditor的config.js的路徑所在'    
+       });
+```
+
+       這樣就大功告成囉！應該就會看到如下的圖
+
+![](/assets/u64f7u53d6-4.PNG)
 
